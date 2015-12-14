@@ -60,8 +60,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $streamWrapper->getStreamSocketClient(Argument::any(), Argument::any(), Argument::any(), Argument::any(), Argument::any())->will(function ($args) {
             $fileName = "/tmp/".uniqid();
             $f  = fopen($fileName, 'w');
-            fwrite($f, "INFO: \n");
-            fwrite($f, "-ERR \n");
 
             return $f;
 

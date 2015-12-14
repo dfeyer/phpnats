@@ -71,6 +71,21 @@ class ConnectionOptions
     private $reconnect = true;
 
     /**
+     * Array of Servers
+     *
+     * @var boolean
+     */
+    private $servers = array();
+
+    /**
+     * Randomize
+     *
+     * @var array
+     */
+    private $randomize = array();
+
+
+    /**
      * Get the URI for a server.
      *
      * @return string
@@ -314,6 +329,54 @@ class ConnectionOptions
     public function setReconnect($reconnect)
     {
         $this->reconnect = $reconnect;
+
+        return $this;
+    }
+
+    /**
+     * Get servers.
+     *
+     * @return array
+     */
+    public function getServers()
+    {
+        return $this->servers;
+    }
+
+    /**
+     * Set servers.
+     *
+     * @param mixed $servers Servers.
+     *
+     * @return $this
+     */
+    public function setServers($servers)
+    {
+        $this->servers = $servers;
+
+        return $this;
+    }
+
+    /**
+     * Get randomize.
+     *
+     * @return boolean
+     */
+    public function getRandomize()
+    {
+        return $this->randomize;
+    }
+
+    /**
+     * Set randomize.
+     *
+     * @param boolean $randomize Randomize.
+     *
+     * @return $this
+     */
+    public function setRandomize($randomize)
+    {
+        $this->randomize = $randomize;
 
         return $this;
     }

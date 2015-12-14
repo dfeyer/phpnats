@@ -99,11 +99,25 @@ class Connection
     private $streamSocket;
 
     /**
+     * Array of Stream File Pointer.
+     *
+     * @var mixed Array of Socket file pointer
+     */
+    private $streamSocketServers;
+
+    /**
      * Stream wrapper for testing purposes.
      *
      * @var mixed StreamWrapper.
      */
     private $streamWrapper;
+
+    /**
+     * Array of Servers
+     *
+     * @var array array[Server].
+     */
+    private $servers;
 
     /**
      * Constructor.
@@ -121,6 +135,18 @@ class Connection
         if (is_null($options)) {
             $this->options = new ConnectionOptions();
         }
+
+        $this->init();
+    }
+
+    /**
+     * Init function.
+     *
+     * @return void
+    */
+    private function init()
+    {
+        $this->setupServerPools();
     }
 
     /**
@@ -217,7 +243,33 @@ class Connection
      */
     public function connect($timeout = null)
     {
-        $this->streamSocket = $this->getStream($this->options->getAddress(), $timeout);
+        foreach ($this->servers as $server) {
+            $this->streamSocket = $this->getStream($server->getUrl(), $timeout);
+            try {
+                $this->sendConnect();
+                $server->setIsConnected(true);
+                $server->setLastAttemp(time());
+                $server->setServerSocket($this->streamSocket);
+
+            } catch (\Exception $e) {
+                $server->setIsConnected(false);
+            }
+        }
+
+        reset($this->servers);
+        $server = current($this->servers);
+
+        $this->streamSocket = $server->getServerSocket();
+    }
+
+    /**
+     * Send CONNECT message and check for valid conexion.
+     *
+     * @throws \Exception Invalid connexion.
+     * @return void
+    */
+    private function sendConnect()
+    {
         $msg = 'CONNECT '.$this->options;
         $this->send($msg);
 
@@ -233,6 +285,45 @@ class Connection
         }
     }
 
+    /**
+     * Create connexion for every possible server.
+     *
+     * @return void
+     */
+    private function setupServerPools()
+    {
+        $servers = $this->options->getServers();
+        if ($this->options->getRandomize()) {
+            suffle($servers);
+        }
+
+        foreach ($servers as $server) {
+            $this->servers[] = new Server($server);
+        }
+
+        if (count($this->servers)<=0) {
+            $this->servers[] = new Server($this->options->getAddress());
+        }
+    }
+
+    /**
+     * Select the next connexion in the server's pool
+     *
+     * @return void
+     */
+    public function selectNextServer()
+    {
+        $server = array_shift($this->servers);
+
+        $this->servers[] = $server;
+
+        if ($server->getIsConnected()) {
+            $this->streamSocket = $server->getServerSocket();
+        } else {
+            $this->streamSocket = $this->getStream($server->getUrl());
+        }
+    }
+    
     /**
      * Sends PING message.
      *
@@ -424,8 +515,11 @@ class Connection
     public function reconnect()
     {
         $this->reconnects += 1;
+        $server = current($this->servers);
+        $server->setIsConnected(false);
         $this->close();
-        $this->connect();
+        $this->selectNextServer();
+        $this->sendConnect();
     }
 
     /**
