@@ -333,7 +333,7 @@ class Connection
      * @return \Exception|void
      * @codeCoverageIgnore
      */
-    private function handleMSG($line)
+    private function handleMSG(string $line)
     {
         $parts = explode(' ', $line);
         $subject = null;

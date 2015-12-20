@@ -119,7 +119,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setHost($host)
+    public function setHost(string $host)
     {
         $this->host = $host;
 
@@ -143,7 +143,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setPort($port)
+    public function setPort(int $port)
     {
         $this->port = $port;
 
@@ -167,7 +167,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setUser($user)
+    public function setUser(string $user)
     {
         $this->user = $user;
 
@@ -191,7 +191,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setPass($pass)
+    public function setPass(string $pass)
     {
         $this->pass = $pass;
 
@@ -215,7 +215,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setLang($lang)
+    public function setLang(string $lang)
     {
         $this->lang = $lang;
 
@@ -239,7 +239,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setVersion($version)
+    public function setVersion(string $version)
     {
         $this->version = $version;
 
@@ -263,7 +263,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setVerbose($verbose)
+    public function setVerbose(bool $verbose)
     {
         $this->verbose = $verbose;
 
@@ -287,7 +287,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setPedantic($pedantic)
+    public function setPedantic(bool $pedantic)
     {
         $this->pedantic = $pedantic;
 
@@ -311,7 +311,7 @@ class ConnectionOptions
      *
      * @return $this
      */
-    public function setReconnect($reconnect)
+    public function setReconnect(bool $reconnect)
     {
         $this->reconnect = $reconnect;
 
