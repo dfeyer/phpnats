@@ -142,7 +142,7 @@ class Connection
      *
      * @return void
      */
-    private function send($payload)
+    private function send(string $payload)
     {
         $msg = $payload."\r\n";
         fwrite($this->streamSocket, $msg, strlen($msg));
@@ -155,7 +155,7 @@ class Connection
      *
      * @return string
      */
-    private function receive($len = null)
+    private function receive(int $len = null)
     {
         if ($len) {
             $line = fgets($this->streamSocket, $len + 1);
@@ -179,7 +179,7 @@ class Connection
      * @return resource
      * @throws \Exception Exception raised if connection fails.
      */
-    private function getStream($address, $timeout = null)
+    private function getStream(string $address, int $timeout = null)
     {
         if (is_null($timeout)) {
             $timeout = intval(ini_get('default_socket_timeout'));
@@ -215,7 +215,7 @@ class Connection
      * @throws \Exception Exception raised if connection fails.
      * @return void
      */
-    public function connect($timeout = null)
+    public function connect(int $timeout = null)
     {
         $this->streamSocket = $this->getStream($this->options->getAddress(), $timeout);
         $msg = 'CONNECT '.$this->options;
@@ -255,7 +255,7 @@ class Connection
      *
      * @return void
      */
-    public function request($subject, $payload, $callback, $wait = 1)
+    public function request(string $subject, string $payload, $callback, int $wait = 1)
     {
         $inbox = uniqid('_INBOX.');
         $this->subscribe($inbox, $callback);
@@ -275,7 +275,7 @@ class Connection
      *
      * @return void
      */
-    public function publish($subject, $payload)
+    public function publish(string $subject, string $payload)
     {
         $msg = 'PUB '.$subject.' '.strlen($payload);
         $this->send($msg . "\r\n" . $payload);
@@ -290,7 +290,7 @@ class Connection
      *
      * @return string
      */
-    public function subscribe($subject, \Closure $callback)
+    public function subscribe(string $subject, \Closure $callback)
     {
         $sid = uniqid();
         $msg = 'SUB '.$subject.' '.$sid;
@@ -307,7 +307,7 @@ class Connection
      *
      * @return void
      */
-    public function unsubscribe($sid)
+    public function unsubscribe(string $sid)
     {
         $msg = 'UNSUB '.$sid;
         $this->send($msg);
@@ -368,7 +368,7 @@ class Connection
      *
      * @return resource $connection Connection object
      */
-    public function wait($quantity = 0)
+    public function wait(int $quantity = 0)
     {
         $count = 0;
         while (!feof($this->streamSocket)) {
@@ -401,7 +401,7 @@ class Connection
      *
      * @return boolean
      */
-    public function setStreamTimeout($seconds)
+    public function setStreamTimeout(int $seconds)
     {
         if ($this->isConnected()) {
             if (is_int($seconds)) {
