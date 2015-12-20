@@ -42,7 +42,7 @@ class Message
      * @param string     $sid     Message Sid.
      * @param Connection $conn    Message Connection.
      */
-    public function __construct($subject, $body, $sid, Connection $conn)
+    public function __construct(string $subject, string $body, string $sid, Connection $conn)
     {
         $this->setSubject($subject);
         $this->setBody($body);
@@ -57,7 +57,7 @@ class Message
      *
      * @return $this
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject)
     {
         $this->subject = $subject;
 
@@ -81,7 +81,7 @@ class Message
      *
      * @return $this
      */
-    public function setBody($body)
+    public function setBody(string $body)
     {
         $this->body = $body;
         return $this;
@@ -104,7 +104,7 @@ class Message
      *
      * @return $this
      */
-    public function setSid($sid)
+    public function setSid(string $sid)
     {
         $this->sid = $sid;
         return $this;
@@ -160,7 +160,7 @@ class Message
      *
      * @return void
      */
-    public function reply($body)
+    public function reply(string $body)
     {
         $this->getConn()->publish(
             $this->getSubject(),

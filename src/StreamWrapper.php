@@ -18,7 +18,7 @@ class StreamWrapper
      *
      * @return stream
      */
-    public function getStreamSocketClient($address, &$errno, &$errstr, $timeout, $typeStream)
+    public function getStreamSocketClient(string $address, int &$errno, string &$errstr, int $timeout, int $typeStream)
     {
         return stream_socket_client($address, $errno, $errstr, $timeout, $typeStream);
     }
@@ -32,7 +32,7 @@ class StreamWrapper
      * @return boolean
      *
     */
-    public function setStreamTimeout($stream, $seconds)
+    public function setStreamTimeout($stream, int $seconds)
     {
         return stream_set_timeout($stream, $seconds);
     }
